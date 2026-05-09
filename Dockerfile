@@ -20,7 +20,7 @@ FROM jlesage/baseimage-gui:alpine-3.23-v4.11.3
 ARG DOCKER_IMAGE_VERSION=
 
 # Define software versions.
-ARG CHROMIUM_VERSION=146.0.7680.177-r0
+ARG CHROMIUM_VERSION=147.0.7727.116-r0
 
 # Define software download URLs.
 
@@ -38,7 +38,12 @@ RUN \
         adwaita-icon-theme \
         mesa-gl \
         mesa-dri-gallium \
-        mesa-va-gallium
+        mesa-va-gallium \
+		python3 \
+		py3-pip
+
+COPY requirements-docker.txt /tmp/
+RUN pip3 install --no-cache-dir --break-system-packages -r /tmp/requirements-docker.txt
 
 # Generate and install favicons.
 RUN \
