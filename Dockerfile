@@ -43,7 +43,12 @@ RUN \
 		py3-pip
 
 COPY requirements-docker.txt /tmp/
-RUN pip3 install --no-cache-dir --break-system-packages -r /tmp/requirements-docker.txt
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+COPY requirements-docker.txt /tmp/
+
+RUN pip install --no-cache-dir -r /tmp/requirements-docker.txt
 
 # Generate and install favicons.
 RUN \
