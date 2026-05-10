@@ -40,15 +40,13 @@ RUN \
         mesa-dri-gallium \
         mesa-va-gallium \
 		python3 \
-		py3-pip
+		py3-pip \
+		chromium-chromedriver=${CHROMIUM_VERSION}
 
-COPY requirements-docker.txt /tmp/
-RUN python3 -m venv /opt/venv
+# Install Python dependencies.
+RUN python3 -m venv /opt/venv && \
+    /opt/venv/bin/pip install --no-cache-dir selenium>=4.15.0 setuptools>=69.0.0 python-dotenv>=1.0.0 websockets>=12.0 flask>=3.0.0
 ENV PATH="/opt/venv/bin:$PATH"
-
-COPY requirements-docker.txt /tmp/
-
-RUN pip install --no-cache-dir -r /tmp/requirements-docker.txt
 
 # Generate and install favicons.
 RUN \
@@ -69,6 +67,9 @@ RUN \
 # Set public environment variables.
 ENV \
     CHROMIUM_APP_URL=
+
+# Expose ports.
+EXPOSE 5801
 
 # Metadata.
 LABEL \

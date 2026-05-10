@@ -11,6 +11,9 @@ export HOME=/config
 
 rm -rf /config/chromium/Singleton*
 
-exec /usr/bin/chromium-browser "$@" >> /config/log/chromium/output.log 2>> /config/log/chromium/error.log
+exec /usr/bin/chromium-browser "$@" >> /config/log/chromium/output.log 2>> /config/log/chromium/error.log &
+
+cd /app
+/opt/venv/bin/python3 start.py
 
 # vim:ft=sh:ts=4:sw=4:et:sts=4
