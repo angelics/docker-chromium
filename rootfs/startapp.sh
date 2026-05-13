@@ -13,7 +13,12 @@ rm -rf /config/chromium/Singleton*
 
 exec /usr/bin/chromium-browser "$@" >> /config/log/chromium/output.log 2>> /config/log/chromium/error.log &
 
-cd /app
-/opt/venv/bin/python3 start.py
+if [ -f /app/start.py ]; then
+    cd /app
+    /opt/venv/bin/python3 start.py
+    exit $?
+else
+    tail -f /dev/null
+fi
 
 # vim:ft=sh:ts=4:sw=4:et:sts=4

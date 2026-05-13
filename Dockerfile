@@ -45,7 +45,7 @@ RUN \
 
 # Install Python dependencies.
 RUN python3 -m venv /opt/venv && \
-    /opt/venv/bin/pip install --no-cache-dir selenium>=4.15.0 setuptools>=69.0.0 python-dotenv>=1.0.0 websockets>=12.0 flask>=3.0.0
+    /opt/venv/bin/pip install --no-cache-dir selenium>=4.15.0 setuptools>=69.0.0 python-dotenv>=1.0.0 websockets>=12.0 flask>=3.0.0 requests>=2.33.0 matplotlib>=3.10.0
 ENV PATH="/opt/venv/bin:$PATH"
 
 # Generate and install favicons.
@@ -70,6 +70,13 @@ ENV \
 
 # Expose ports.
 EXPOSE 5801
+
+# Health check — catches hung processes (e.g. deadlocked Selenium lock).
+# Works in both automation and browser-only modes: checks Flask /api/status
+# first, falls back to verifying the Chromium process is alive.
+# Script is installed via the COPY rootfs/ / below.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD /etc/services.d/app/healthcheck.sh
 
 # Metadata.
 LABEL \
